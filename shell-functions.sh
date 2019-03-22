@@ -25,8 +25,9 @@ lc-clone(){
     REPO_NAME=$(basename "$URL" ".${URL##*.}")
 
     TARGET_DIR=${2:-${REPO_NAME}}
+    WITHOUT_GITURL=${URL:15}
 
-    NEW_URL="git@github.com-$GIT_USERNAME:$GIT_USERNAME/$REPO_NAME.git"
+    NEW_URL="git@github.com-$GIT_USERNAME:$WITHOUT_GITURL"
 
     git clone ${NEW_URL} ${TARGET_DIR}
 
