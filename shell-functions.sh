@@ -12,7 +12,7 @@ pull-all(){
 lc-clone(){
     CONFIG_FILE_NAME=./.config.json
     if [[ ! -f ${CONFIG_FILE_NAME} ]]; then
-        echo "Config file is not found!. Please create it. For more info check https://github.com/sumanmaity112/dev-tools#dev-tools"
+        echo "Config file is not found!. Please create it. For more info check https://github.com/sumanmaity112/dev-tools#lc-clone"
         return 1;
     fi
 
