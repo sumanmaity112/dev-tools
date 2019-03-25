@@ -46,3 +46,25 @@ lc-clone(){
         return $?
     fi
 }
+
+start-vpn(){
+    local VPN_NAME=$1;
+
+    if [[ -z ${VPN_NAME} ]]; then
+        echo "Please provide VPN name. For more info check https://github.com/sumanmaity112/dev-tools#start-vpn"
+        return 1;
+    fi
+
+    osascript -e "tell application \"Tunnelblick\"" -e "connect \"${VPN_NAME}\"" -e "end tell"
+}
+
+stop-vpn(){
+    local VPN_NAME=$1;
+
+    if [[ -z ${VPN_NAME} ]]; then
+        echo "Please provide VPN name. For more info check https://github.com/sumanmaity112/dev-tools#stop-vpn"
+        return 1;
+    fi
+
+    osascript -e "tell application \"Tunnelblick\"" -e "disconnect \"${VPN_NAME}\"" -e "end tell"
+}

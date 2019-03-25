@@ -10,12 +10,14 @@ Table of Contents
       * [Commands](#commands)
          * [pull-all](#pull-all)
          * [lc-clone](#lc-clone)
+         * [start-vpn](#start-vpn)
+         * [stop-vpn](#stop-vpn)
 
 ## Setup
 Add this to your `~/.profile` / `.bash_profile` / `~/.zshrc` (depending
 on your shell and setup):
 ```bash
-CUSTOM_COMMANDS=path/to/dev-tools/etc/shell-init.sh
+CUSTOM_COMMANDS=path/to/dev-tools/shell-functions.sh
 [ -f $CUSTOM_COMMANDS ] && . $CUSTOM_COMMANDS
 ```
 
@@ -36,3 +38,15 @@ For this command to work properly you have to create `.config.json` in the worki
 }
 ```
 Here **git_username** defines the github username, **committer_name** defines the actual name for the user, **email** defines the E-mail id associate with the given github userId and **signkey** defines the gpg signkey. Check this link to know more about [how to create new GPG key](https://help.github.com/en/articles/generating-a-new-gpg-key).
+
+### start-vpn
+This command is use to connect to a VPN connection using [Tunnelblick](https://tunnelblick.net/) application.
+
+##### syntax
+```start-vpn <vpn name>```
+
+### stop-vpn
+This command is use to disconnect a already connected VPN connection using [Tunnelblick](https://tunnelblick.net/) application.
+
+##### syntax
+```stop-vpn <vpn name>```
