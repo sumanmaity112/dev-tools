@@ -12,6 +12,8 @@ Table of Contents
          * [lc-clone](#lc-clone)
          * [start-vpn](#start-vpn)
          * [stop-vpn](#stop-vpn)
+         * [install-talisman](#install-talisman)
+         * [install-talisman-all](#install-talisman-all)
 
 ## Setup
 Add this to your `~/.profile` / `.bash_profile` / `~/.zshrc` (depending
@@ -50,3 +52,19 @@ This command is use to disconnect a already connected VPN connection using [Tunn
 
 ##### syntax
 ```stop-vpn <vpn name>```
+
+### install-talisman
+
+This command install [Talisman](https://github.com/thoughtworks/talisman) for given git repo as a ***pre-commit*** hook.
+
+#### syntax
+```install-talisman [directory name]```
+
+By default it takes `directory name` as current directory (`.`)
+
+### install-talisman-all
+
+This command does same as [install-talisman](#install-talisman) command, but only difference is this command does for all the git repo presents in current directory.
+
+#### syntax
+```install-talisman-all```

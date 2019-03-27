@@ -68,3 +68,53 @@ stop-vpn(){
 
     osascript -e "tell application \"Tunnelblick\"" -e "disconnect \"${VPN_NAME}\"" -e "end tell"
 }
+
+__download-talisman(){
+    local TALISMAN_PATH=$1
+
+    curl https://thoughtworks.github.io/talisman/install.sh > ${TALISMAN_PATH}
+    chmod +x ${TALISMAN_PATH}
+}
+
+__add-talisman-hook(){
+    local TALISMAN_PATH=$1
+    local DESTINATION_PATH=${2:-"."}
+
+   if [[ -d ${DESTINATION_PATH} ]]; then
+
+       (cd ${DESTINATION_PATH} && sh ${TALISMAN_PATH} > /dev/null && mv .git/hooks/pre-push .git/hooks/pre-commit)
+
+       if [[ $? = 0 ]]; then
+           tput bold; tput setaf 2; echo "Talisman successfully installed to '${DESTINATION_PATH}/.git/hooks/pre-commit'."
+       fi
+    fi
+}
+
+install-talisman(){
+    local DESTINATION_PATH=$1
+    local TALISMAN_PATH=/tmp/install-talisman.sh
+
+    __download-talisman ${TALISMAN_PATH}
+
+    __add-talisman-hook ${TALISMAN_PATH} ${DESTINATION_PATH}
+}
+
+install-talisman-all(){
+    local TALISMAN_PATH=/tmp/install-talisman.sh
+
+    __download-talisman ${TALISMAN_PATH}
+
+    local SUB_DIRS=$(ls -d */ 2> /dev/null)
+    local RET_CODE=$?
+
+    if [[ ! ${RET_CODE} -eq 0 ]]; then
+       echo "No sub directories presents in the current path"
+       return ${RET_CODE};
+    fi
+
+    for SUB_DIR in ${SUB_DIRS}; do
+        if [[ -d ${SUB_DIR}/.git ]]; then
+            __add-talisman-hook ${TALISMAN_PATH} ${SUB_DIR}
+        fi
+    done
+}
