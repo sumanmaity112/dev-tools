@@ -10,37 +10,35 @@ pull-all(){
 }
 
 lc-clone(){
-    CONFIG_FILE_NAME=./.config.json
+    local CONFIG_FILE_NAME=./.config.json
     if [[ ! -f ${CONFIG_FILE_NAME} ]]; then
         echo "Config file is not found!. Please create it. For more info check https://github.com/sumanmaity112/dev-tools#lc-clone"
         return 1;
     fi
 
-    GIT_USERNAME=$(jq -r .git_username ${CONFIG_FILE_NAME})
-    COMMITTER_NAME=$(jq -r .committer_name ${CONFIG_FILE_NAME})
-    EMAIL=$(jq -r .email ${CONFIG_FILE_NAME})
-    SIGNKEY=$(jq -r .signkey ${CONFIG_FILE_NAME})
+    local GIT_USERNAME=$(jq -r .git_username ${CONFIG_FILE_NAME})
+    local COMMITTER_NAME=$(jq -r .committer_name ${CONFIG_FILE_NAME})
+    local EMAIL=$(jq -r .email ${CONFIG_FILE_NAME})
+    local SIGNKEY=$(jq -r .signkey ${CONFIG_FILE_NAME})
+    local IDENTITY_FILE=$(jq -r .identity_file_path ${CONFIG_FILE_NAME})
 
-    URL=$1
-    REPO_NAME=$(basename "$URL" ".${URL##*.}")
+    local URL=$1
+    local REPO_NAME=$(basename "$URL" ".${URL##*.}")
 
-    TARGET_DIR=${2:-${REPO_NAME}}
-    WITHOUT_GITURL=${URL:15}
+    local TARGET_DIR=${2:-${REPO_NAME}}
 
-    NEW_URL="git@github.com-$GIT_USERNAME:$WITHOUT_GITURL"
-
-    git clone ${NEW_URL} ${TARGET_DIR}
+    ssh-add ${IDENTITY_FILE}
+    git clone ${URL} ${TARGET_DIR}
 
     if [[ $? = 0 ]]
     then
         # set up git user details and sign key
 
         pushd ${TARGET_DIR} > /dev/null
-            echo $(pwd)
             git config user.name ${COMMITTER_NAME}
             git config user.email ${EMAIL}
             git config user.signingkey ${SIGNKEY}
-
+            git config core.sshCommand "ssh -i ${IDENTITY_FILE}"
         popd > /dev/null
     else
         return $?
