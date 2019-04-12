@@ -9,6 +9,7 @@ Table of Contents
       * [Setup](#setup)
       * [Commands](#commands)
          * [pull-all](#pull-all)
+         * [lc-clone](#lc-init)
          * [lc-clone](#lc-clone)
          * [start-vpn](#start-vpn)
          * [stop-vpn](#stop-vpn)
@@ -26,6 +27,12 @@ CUSTOM_COMMANDS=path/to/dev-tools/shell-functions.sh
 ## Commands
 ### pull-all
 This command is use to pull latest code for all the git repositiories present in the current directiory from remote.
+
+### lc-init
+This command is use to create an empty Git repository or reinitialize an existing one in the current directory.
+
+#### syntax
+```lc-init```
 
 ### lc-clone
 This command is use to clone a git repository with *ssh url* and *custom ssh identity file*. This commands also configure *git username*, *committer name* and *signkey* only for the same repository.

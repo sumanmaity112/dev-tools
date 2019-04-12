@@ -9,12 +9,9 @@ pull-all(){
     done
 }
 
-lc-clone(){
-    local CONFIG_FILE_NAME=./.config.json
-    if [[ ! -f ${CONFIG_FILE_NAME} ]]; then
-        echo "Config file is not found!. Please create it. For more info check https://github.com/sumanmaity112/dev-tools#lc-clone"
-        return 1;
-    fi
+__config-local-git(){
+    # set up git user details and sign key
+    local CONFIG_FILE_NAME=$1
 
     local GIT_USERNAME=$(jq -r .git_username ${CONFIG_FILE_NAME})
     local COMMITTER_NAME=$(jq -r .committer_name ${CONFIG_FILE_NAME})
@@ -22,23 +19,43 @@ lc-clone(){
     local SIGNKEY=$(jq -r .signkey ${CONFIG_FILE_NAME})
     local IDENTITY_FILE=$(jq -r .identity_file_path ${CONFIG_FILE_NAME})
 
+    git config user.name ${COMMITTER_NAME}
+    git config user.email ${EMAIL}
+    git config user.signingkey ${SIGNKEY}
+    git config core.sshCommand "ssh -i ${IDENTITY_FILE}"
+}
+
+lc-init(){
+    local CONFIG_FILE_NAME=../.config.json
+    if [[ ! -f ${CONFIG_FILE_NAME} ]]; then
+        echo "Config file is not found!. Please create it. For more info check https://github.com/sumanmaity112/dev-tools#lc-init"
+        return 1;
+    fi
+
+    git init .
+
+    __config-local-git ${CONFIG_FILE_NAME}
+}
+
+lc-clone(){
+    local CONFIG_FILE_NAME=./.config.json
+    if [[ ! -f ${CONFIG_FILE_NAME} ]]; then
+        echo "Config file is not found!. Please create it. For more info check https://github.com/sumanmaity112/dev-tools#lc-clone"
+        return 1;
+    fi
+
     local URL=$1
     local REPO_NAME=$(basename "$URL" ".${URL##*.}")
 
     local TARGET_DIR=${2:-${REPO_NAME}}
 
-    ssh-add ${IDENTITY_FILE}
+    ssh-add $(jq -r .identity_file_path ${CONFIG_FILE_NAME})
     git clone ${URL} ${TARGET_DIR}
 
     if [[ $? = 0 ]]
     then
-        # set up git user details and sign key
-
         pushd ${TARGET_DIR} > /dev/null
-            git config user.name ${COMMITTER_NAME}
-            git config user.email ${EMAIL}
-            git config user.signingkey ${SIGNKEY}
-            git config core.sshCommand "ssh -i ${IDENTITY_FILE}"
+            __config-local-git ${CONFIG_FILE_NAME}
         popd > /dev/null
     else
         return $?
