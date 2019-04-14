@@ -8,8 +8,9 @@ Table of Contents
    * [dev-tools](#dev-tools)
       * [Setup](#setup)
       * [Commands](#commands)
+         * [init-lconf](#init-lconf)
          * [pull-all](#pull-all)
-         * [lc-clone](#lc-init)
+         * [lc-init](#lc-init)
          * [lc-clone](#lc-clone)
          * [start-vpn](#start-vpn)
          * [stop-vpn](#stop-vpn)
@@ -25,18 +26,9 @@ CUSTOM_COMMANDS=path/to/dev-tools/shell-functions.sh
 ```
 
 ## Commands
-### pull-all
-This command is use to pull latest code for all the git repositiories present in the current directiory from remote.
-
-### lc-init
-This command is use to create an empty Git repository or reinitialize an existing one in the current directory.
-
-#### syntax
-```lc-init```
-
-### lc-clone
-This command is use to clone a git repository with *ssh url* and *custom ssh identity file*. This commands also configure *git username*, *committer name* and *signkey* only for the same repository.
-For this command to work properly you have to create `.config.json` in the working directory (where you want to clone repository). Check the following example for valid format of `.config.json`
+### init-lconf
+This command is used to initialize local config file (`./.config.json`). This file is used by `lc-init`, `lc-clone` etc commands. This file holds the information about **git username**, **committer name**, **identity file** and **signkey** for current directory. 
+Check the following example config created by this command.
 
 ```json
 {
@@ -47,12 +39,26 @@ For this command to work properly you have to create `.config.json` in the worki
     "identity_file_path": "/Users/jane/.ssh/id_github"
 }
 ```
-Here **git_username** defines the github username, **committer_name** defines the actual name for the user, **email** defines the E-mail id associate with the given github userId and **signkey** defines the gpg signkey. Check this link to know more about [how to create new GPG key](https://help.github.com/en/articles/generating-a-new-gpg-key).
+Here **git_username** defines the github username, **committer_name** defines the actual name for the user, **email** defines the E-mail id associate with the given github userId, **identity_file_path** defines the identity file will be use during **ssh** connection and **signkey** defines the gpg signkey. Check this link to know more about [how to create new GPG key](https://help.github.com/en/articles/generating-a-new-gpg-key).
 
 Note: A new identity file can be created using the following command
  ```sh 
  ssh-keygen -t rsa -b 4096 -C "<email id>"
  ```
+
+### pull-all
+This command is use to pull latest code for all the git repositories present in the current directory from remote.
+
+### lc-init
+This command is use to create an empty Git repository or reinitialize an existing one in the current directory.
+For this command to work properly you have to create `.config.json` in the working directory (where you want to clone repositories). You can create the config file manually or you can use [init-lconf](#init-lconf) command to do it.
+
+#### syntax
+```lc-init```
+
+### lc-clone
+This command is use to clone a git repository with *ssh url* and *custom ssh identity file*. This commands also configure *git username*, *committer name* and *signkey* only for the same repository.
+For this command to work properly you have to create `.config.json` in the working directory (where you want to clone repositories). You can create the config file manually or you can use [init-lconf](#init-lconf) command to do it.
 
 ### start-vpn
 This command is use to connect to a VPN connection using [Tunnelblick](https://tunnelblick.net/) application.

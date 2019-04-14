@@ -1,5 +1,51 @@
 #!/usr/bin/env bash
 
+init-lconf(){
+    if [[ -f ".config.json" ]]
+    then
+        echo ".config.jso is already present. Do you want to reinitialize (Y/N)? "
+        read ANSWER
+
+        if [[ ! (${ANSWER} = "Y" || ${ANSWER} = "y") ]]; then
+            return 0;
+        fi
+    fi
+
+    echo "Starting initialization of local git config..."
+
+    #read -p is not working for some reason
+
+    echo "Enter git username: "
+    read GIT_USERNAME
+    echo "Enter git committer name: "
+    read COMMITTER_NAME
+    echo "Enter email id associated with given username: "
+    read EMAIL
+    echo "Enter GPG signkey: "
+    read SIGNKEY
+    echo "Enter identity file path: "
+    read IDENTITY_FILE_PATH
+
+    realpath ${IDENTITY_FILE_PATH:-""} 1>/dev/null
+    if [[ $? = 0 ]]
+    then
+        cat > .config.json <<EOF
+{
+  "git_username": "${GIT_USERNAME}",
+  "committer_name": "${COMMITTER_NAME}",
+  "email": "${EMAIL}",
+  "signkey": "${SIGNKEY}",
+  "identity_file_path": "$(realpath ${IDENTITY_FILE_PATH})"
+}
+EOF
+        echo "Successfully initialized. Created $(realpath .config.json) file"
+    else
+        local OLD_RETURN=$?
+        echo "Initialization failed"
+        return ${OLD_RETURN}
+    fi
+}
+
 pull-all(){
     for subDir in `ls -d */`; do
         if [[ -d ${subDir}/.git ]]; then
