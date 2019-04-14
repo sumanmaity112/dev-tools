@@ -22,7 +22,7 @@ Add this to your `~/.profile` / `.bash_profile` / `~/.zshrc` (depending
 on your shell and setup):
 ```bash
 CUSTOM_COMMANDS=path/to/dev-tools/shell-functions.sh
-[ -f $CUSTOM_COMMANDS ] && . $CUSTOM_COMMANDS
+[[ -f ${CUSTOM_COMMANDS} ]] && . ${CUSTOM_COMMANDS}
 ```
 
 ## Commands
