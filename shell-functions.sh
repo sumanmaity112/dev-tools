@@ -61,7 +61,7 @@ pull-all(){
 }
 
 lc-init(){
-    local CONFIG_FILE_NAME=../.config.json
+    local CONFIG_FILE_NAME=$(realpath ../.config.json)
     if [[ ! -f ${CONFIG_FILE_NAME} ]]; then
         echo "Config file is not found!. Please create it. For more info check https://github.com/sumanmaity112/dev-tools#lc-init"
         return 1;
@@ -73,7 +73,7 @@ lc-init(){
 }
 
 lc-clone(){
-    local CONFIG_FILE_NAME=./.config.json
+    local CONFIG_FILE_NAME=$(realpath ./.config.json)
     if [[ ! -f ${CONFIG_FILE_NAME} ]]; then
         echo "Config file is not found!. Please create it. For more info check https://github.com/sumanmaity112/dev-tools#lc-clone"
         return 1;
