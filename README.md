@@ -16,6 +16,7 @@ Table of Contents
          * [stop-vpn](#stop-vpn)
          * [install-talisman](#install-talisman)
          * [install-talisman-all](#install-talisman-all)
+         * [upgrade](#upgrade)
 
 ## Setup
 Add this to your `~/.profile` / `.bash_profile` / `~/.zshrc` (depending
@@ -87,3 +88,7 @@ This command does same as [install-talisman](#install-talisman) command, but onl
 
 #### syntax
 ```install-talisman-all```
+
+### upgrade
+
+This commands updates **oh-my-zsh**, **brew** and **brew formula**s.

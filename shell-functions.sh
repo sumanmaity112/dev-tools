@@ -147,3 +147,16 @@ install-talisman-all(){
         fi
     done
 }
+
+upgrade(){
+  upgrade_oh_my_zsh
+
+  echo "Updating brew itself"
+  brew update
+
+  echo "Updating brew formulas"
+  brew upgrade
+
+  # shellcheck source=/dev/null
+  source "${HOME}/.zshrc"
+}
