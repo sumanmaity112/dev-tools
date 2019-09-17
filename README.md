@@ -17,7 +17,6 @@ Table of Contents
          * [install-talisman](#install-talisman)
          * [install-talisman-all](#install-talisman-all)
          * [upgrade](#upgrade)
-         * [jwtp](#jwtp)
 
 ## Setup
 Add this to your `~/.profile` / `.bash_profile` / `~/.zshrc` (depending
@@ -93,21 +92,3 @@ This command does same as [install-talisman](#install-talisman) command, but onl
 ### upgrade
 
 This commands updates **oh-my-zsh**, **brew** and **brew formula**s.
-
-### jwtp
-
-This commands decode payload of [**JWT**](https://jwt.io).
-
-##### syntax
-```jwtp <JWT token>```
-
-Note: This command is originally copied from [here](https://gist.github.com/thomasdarimont/46358bc8167fce059d83a1ebdb92b0e7).
-
-### jwth
-
-This commands decode header of [**JWT**](https://jwt.io).
-
-##### syntax
-```jwth <JWT token>```
-
-Note: This command is originally copied from [here](https://gist.github.com/thomasdarimont/46358bc8167fce059d83a1ebdb92b0e7).

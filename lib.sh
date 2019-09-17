@@ -36,20 +36,3 @@ __add-talisman-hook(){
        fi
     fi
 }
-
-__decode_base64_url() {
-  local len=$((${#1} % 4))
-  local result="$1"
-
-  if [ $len -eq 2 ]; then
-    result="$1"'=='
-  elif [ $len -eq 3 ]; then
-    result="$1"'='
-  fi
-
-  echo "$result" | tr '_-' '/+' | openssl enc -d -base64
-}
-
-__decode_jwt(){
-   __decode_base64_url "$(echo -n "$2" | cut -d "." -f "$1")" | jq 'if .exp then (.expStr = (.exp|todate)) else . end'
-}

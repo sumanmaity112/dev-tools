@@ -160,11 +160,3 @@ upgrade(){
   # shellcheck source=/dev/null
   source "${HOME}/.zshrc"
 }
-
-jwtp(){
-  __decode_jwt 2 "$1"
-}
-
-jwth(){
-  __decode_jwt 1 "$1"
-}
