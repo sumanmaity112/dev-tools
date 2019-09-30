@@ -160,3 +160,29 @@ upgrade(){
   # shellcheck source=/dev/null
   source "${HOME}/.zshrc"
 }
+
+opsignin() {
+  local accountname="${1:-my}"
+  local session_name="OP_SESSION_${accountname}"
+
+  if [[ -z "$(eval echo \$"$session_name")" ]]; then
+    eval "$(op signin "${accountname}")"
+  fi
+}
+
+opsignout() {
+  local accountname="${1:-my}"
+
+  op signout
+  unset OP_SESSION_"${accountname}"
+}
+
+op-get-note(){
+  local note_name="${1}"
+  if [[ -z "${note_name}" ]]; then
+    echo "Please provide note name"
+    exit 1
+  fi
+
+  op get item "${note_name}" | jq -r '.details.notesPlain' | pbcopy
+}
