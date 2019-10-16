@@ -184,5 +184,5 @@ op-get-note(){
     exit 1
   fi
 
-  op get item "${note_name}" | jq -r '.details.notesPlain' | pbcopy
+  op get item "${note_name}" | jq -rj '.details.notesPlain' | pbcopy
 }
