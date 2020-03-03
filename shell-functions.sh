@@ -159,6 +159,9 @@ upgrade() {
   echo "Updating brew formulas"
   brew upgrade
 
+  echo "Updating brew cask formulas"
+  brew cask upgrade
+
   # shellcheck source=/dev/null
   source "${HOME}/.zshrc"
 }
