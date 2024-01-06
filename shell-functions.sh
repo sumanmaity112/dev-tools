@@ -58,7 +58,7 @@ pull-all() {
       tput bold
       tput setaf 2
       echo "\033[4m$subDir\033[0m"
-      (cd ${subDir} && git pull --rebase)
+      (cd ${subDir} && git pull --rebase && git fetch -p)
     fi
   done
 }
@@ -86,6 +86,8 @@ lc-clone() {
   local REPO_NAME=$(basename "$URL" ".${URL##*.}")
 
   local TARGET_DIR=${2:-${REPO_NAME}}
+
+  eval "$(ssh-agent -s)"
 
   ssh-add $(jq -r .identity_file_path ${CONFIG_FILE_NAME})
   git clone ${URL} ${TARGET_DIR}
@@ -167,41 +169,11 @@ upgrade() {
 }
 
 opsignin() {
-  local accountname="${1:-my}"
-
-  local curr_time
-  curr_time="$(date +%s)"
-
-  local session_file=${HOME}/.op/session
-  local time_file=${HOME}/.op/last_time
-
-  if [[ ! -e ${time_file} ]]; then
-    echo export OP_LAST_TIME=1 >"${time_file}"
-  fi
-
-  # shellcheck source=/dev/null
-  source "${time_file}"
-
-  if [[ $((curr_time - OP_LAST_TIME)) -gt 1800 ]]; then
-    if [[ -e ${session_file} ]]; then
-      chmod 600 "${session_file}"
-    fi
-
-    if op signin "${accountname}" >"${session_file}"; then
-      chmod 400 "${session_file}"
-      echo export OP_LAST_TIME="${curr_time}" >"${time_file}"
-    fi
-  fi
-
-  # shellcheck source=/dev/null
-  source "${session_file}"
+  op signin
 }
 
 opsignout() {
-  local accountname="${1:-my}"
-
   op signout
-  unset OP_SESSION_"${accountname}"
 }
 
 op-get-note() {
@@ -212,4 +184,15 @@ op-get-note() {
   fi
 
   op get item "${note_name}" | jq -rj '.details.notesPlain' | pbcopy
+}
+
+op-get-credential() {
+  local secret_name="${1:-}"
+
+  if [[ -z "${secret_name}" ]]; then
+      echo "Please provide secret name"
+      exit 1
+  fi
+
+  op item get "${secret_name}" --fields password
 }

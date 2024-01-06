@@ -1,0 +1,4 @@
+fileignoreconfig:
+- filename: shell-functions.sh
+  checksum: ba68d41bee4f573688da132098b6c3ebc55544117e5d0d1d68fc3d6f39341349
+version: "1.0"
